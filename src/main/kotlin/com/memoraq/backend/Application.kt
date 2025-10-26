@@ -33,7 +33,7 @@ fun Application.configureRouting() {
 
 fun Route.greeting(){
     get("/greet"){
-        call.respondText("Greetings from Memoraq!")
+        call.respondText("Greetings from Memoraq backend!")
     }
 }
 

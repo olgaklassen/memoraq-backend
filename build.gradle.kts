@@ -4,15 +4,25 @@ plugins {
 }
 
 group = "com.memoraq.backend"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
 }
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClass.set("com.memoraq.backend.ApplicationKt")
 }
-
+tasks.jar {
+    manifest.attributes["Main-Class"] = "com.memoraq.backend.ApplicationKt"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.main.get().output)
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath
+            .get()
+            .filter { it.name.endsWith("jar") }
+            .map { zipTree(it) }
+    })
+}
 dependencies {
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
@@ -27,5 +37,5 @@ tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(19)
+    jvmToolchain(21)
 }
